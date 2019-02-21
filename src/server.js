@@ -23,4 +23,5 @@ server.listen(PORT, () => {
 
 process.on('uncaughtException', err => {
   console.log(`Catch-all-net for all uncaught errors -> ${err}`);
+  process.exit(1);
 });

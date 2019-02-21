@@ -1,17 +1,17 @@
-const { task, watch, src, dest } = require('gulp');
+const { task, watch, src, dest, series } = require('gulp');
 const babel = require('gulp-babel');
 const uglify = require('gulp-uglify');
 
 require('dotenv').config();
 
 task('build:dev', () => {
-  return src('src/**/*.js', { sourcemaps: true })
+  return src('src/**/*', { sourcemaps: true })
     .pipe(babel())
     .pipe(dest('./dist/src', { sourcemaps: true }));
 });
 
 task('build:prod', () => {
-  return src('src/**/*.js')
+  return src('src/**/*')
     .pipe(babel())
     .pipe(uglify())
     .pipe(dest('./dist/src'));
@@ -25,9 +25,11 @@ task('watch:dev', cb => {
 
 let run;
 
+console.log(process.env.NODE_ENV);
+
 switch (process.env.NODE_ENV) {
   case 'development':
-    run = task('watch:dev');
+    run = series(task('build:dev'), task('watch:dev'));
     break;
   case 'production':
     run = task('build:prod');
