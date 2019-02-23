@@ -1,7 +1,11 @@
 import bookshelf from './bookshelf';
+import { Order } from '.';
 
 const Tax = bookshelf.Model.extend({
-  tableName: 'tax'
+  tableName: 'tax',
+  order() {
+    return this.hasOne(Order);
+  }
 });
 
 export default Tax;

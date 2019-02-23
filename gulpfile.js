@@ -25,8 +25,6 @@ task('watch:dev', cb => {
 
 let run;
 
-console.log(process.env.NODE_ENV);
-
 switch (process.env.NODE_ENV) {
   case 'development':
     run = series(task('build:dev'), task('watch:dev'));
