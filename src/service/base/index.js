@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-console */
 /* eslint-disable require-jsdoc */
 
@@ -35,12 +36,11 @@ class BaseService {
 
   /**
    * Gets a single resource for the specified model
-   * @param {*} id
+   * @param {*} id the specific id of the resource
    * @param {*} params
    * @returns {*} resource | throws error
    * @memberof BaseService
    */
-  // eslint-disable-next-line no-unused-vars
   get(id, ...params) {
     const { model } = this.service;
 
@@ -57,26 +57,89 @@ class BaseService {
 
   /**
    * Create a new resource based on the specified model
-   *
-   * @param {*} data
+   * @param {*} data the data needed to create a new resource
    * @param {*} params
+   * @returns {*} resource | throws error
    * @memberof BaseService
    */
-  // eslint-disable-next-line no-unused-vars
   create(data, ...params) {
+    const { model } = this.service;
+
+    return model
+      .forge(data)
+      .save()
+      .then(result => {
+        return result.toJSON();
+      })
+      .catch(error => {
+        throw new Error(error);
+      });
   }
 
-  // // Replace an existing resource by its id with data
-  // update(id, data, ...params) {
-  // }
+  /**
+   * Replace an existing resource by its id with data
+   * @param {*} id the specific id of the resource
+   * @param {*} data the data needed to update the specified resource
+   * @param {*} params
+   * @returns {*} resource | throws error
+   * @memberof BaseService
+   */
+  update(id, data, ...params) {
+    const { model } = this.service;
 
-  // // Merge new data into a resource
-  // patch(id, data, ...params) {
-  // }
+    return model
+      .forge({ id })
+      .save(data)
+      .then(result => {
+        return result.toJSON();
+      })
+      .catch(error => {
+        throw new Error(error);
+      });
+  }
 
-  // // Remove a resource by its id
-  // remove(id, ...params) {
-  // }
+  /**
+   * Merge new data into a resource given by the specified id
+   * @param {*} id the specific id of the resource
+   * @param {*} data the data needed to update the specified resource
+   * @param {*} params
+   * @returns {*} resource | throws error
+   * @memberof BaseService
+   */
+  patch(id, data, ...params) {
+    const { model } = this.service;
+
+    return model
+      .forge({ id })
+      .save(data, { patch: true })
+      .then(result => {
+        return result.toJSON();
+      })
+      .catch(error => {
+        throw new Error(error);
+      });
+  }
+
+  /**
+   *Remove a resource by its id
+   * @param {*} id
+   * @param {*} params
+   * @memberof BaseService
+   * @returns {*} resource | throws error
+   */
+  remove(id, ...params) {
+    const { model } = this.service;
+
+    return model
+      .forge({ id })
+      .destroy()
+      .then(result => {
+        return result.toJSON();
+      })
+      .catch(error => {
+        throw new Error(error);
+      });
+  }
 }
 
 export default BaseService;
