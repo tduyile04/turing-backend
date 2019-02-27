@@ -3,10 +3,14 @@ import http from 'http';
 import express from 'express';
 import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
+import routes from './route';
 
 dotenv.config();
 
 const app = express();
+const router = express.Router();
+
+routes(router, app);
 
 // Register middlewares
 app.use(bodyParser.urlencoded({ extended: false }));
