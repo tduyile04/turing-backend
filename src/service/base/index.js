@@ -7,11 +7,17 @@ class BaseService {
     this.service.model = model;
   }
 
-  // get a list of resources
+  /**
+   * Get a list of all the resources attached to a specific
+   * model
+   * @param {*} params contains the limit and the offset
+   * @returns {*} list of reesources | throws error
+   * @memberof BaseService
+   */
   find(...params) {
     const { model } = this.service;
-    let fetch;
     const [limit, offset] = params;
+    let fetch;
 
     if (limit && offset) {
       fetch = model.forge().fetchPage({ limit, offset });
@@ -27,13 +33,38 @@ class BaseService {
       });
   }
 
-  // //get a single resources
-  // get(id, ...params) {
-  // }
+  /**
+   * Gets a single resource for the specified model
+   * @param {*} id
+   * @param {*} params
+   * @returns {*} resource | throws error
+   * @memberof BaseService
+   */
+  // eslint-disable-next-line no-unused-vars
+  get(id, ...params) {
+    const { model } = this.service;
 
-  // // create a new resource
-  // create(data, ...params) {
-  // }
+    return model
+      .forge({ id })
+      .fetch()
+      .then(result => {
+        return result.toJSON();
+      })
+      .catch(error => {
+        throw new Error(error);
+      });
+  }
+
+  /**
+   * Create a new resource based on the specified model
+   *
+   * @param {*} data
+   * @param {*} params
+   * @memberof BaseService
+   */
+  // eslint-disable-next-line no-unused-vars
+  create(data, ...params) {
+  }
 
   // // Replace an existing resource by its id with data
   // update(id, data, ...params) {

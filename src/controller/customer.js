@@ -38,6 +38,26 @@ class CustomerController {
         });
       });
   };
+
+  fetchCustomer = (req, res) => {
+    const { service: customerService } = this.controller;
+    const { id } = req.params;
+
+    customerService
+      .get(id)
+      .then(result => {
+        res.json({
+          status: 200,
+          data: result
+        });
+      })
+      .catch(error => {
+        res.json({
+          status: 500,
+          message: error.message
+        });
+      });
+  }
 }
 
 const customerModel = new BaseService(Customer);
